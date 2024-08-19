@@ -5,17 +5,6 @@ pipeline {
         RECIPIENT_EMAIL = "namquang2017@example.com"
         LOG_FILE_PATH = "logs/build-log.txt"
     }
-    def sendEmailNotification(stageName, status) 
-    {        
-        emailext(
-            subject: "${stageName} Stage - ${status}",
-            body: "The ${stageName} stage has completed with status: ${status}. Please read the attached logs for more details.",
-            to: "${env.RECIPIENT_EMAIL}",
-            attachmentsPattern: "${env.WORKSPACE}/${env.LOG_FILE_PATH}",
-            attachLog: true
-        )
-    }
-
     stages {
         stage('Build') {
             steps {
@@ -32,7 +21,13 @@ pipeline {
                 sh 'cd build && ctest --output-on-failure'
                 always {
                     script {
-                        sendEmailNotification('Unit and Integration Tests', currentBuild.currentResult)
+                        emailext(
+                            subject: "Unit and Integration Tests Stage - ${currentBuild.currentResult}",
+                            body: "The ${Unit and Integration Tests} stage has completed with status: ${currentBuild.currentResult}. Please read the attached logs for more details.",
+                            to: "${env.RECIPIENT_EMAIL}",
+                            attachmentsPattern: "${env.WORKSPACE}/${env.LOG_FILE_PATH}",
+                            attachLog: true
+                        )
                     }
                 }
                 }
@@ -54,7 +49,14 @@ pipeline {
                 post {
                 always {
                     script {
-                        sendEmailNotification('Security Scan', currentBuild.currentResult)
+                            emailext(
+                                subject: "Security Scan Stage - ${currentBuild.currentResult}",
+                                body: "The ${Security Scan} stage has completed with status: ${currentBuild.currentResult}. Please read the attached logs for more details.",
+                                to: "${env.RECIPIENT_EMAIL}",
+                                attachmentsPattern: "${env.WORKSPACE}/${env.LOG_FILE_PATH}",
+                                attachLog: true
+                        )
+
                     }
                 }
                 }
