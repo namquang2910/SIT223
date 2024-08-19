@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        RECIPIENT_EMAIL = "your-email@example.com"
+        RECIPIENT_EMAIL = "namquang2017@example.com"
         LOG_FILE_PATH = "logs/build-log.txt"
     }
 
