@@ -5,6 +5,16 @@ pipeline {
         RECIPIENT_EMAIL = "namquang2017@example.com"
         LOG_FILE_PATH = "logs/build-log.txt"
     }
+    def sendEmailNotification(stageName, status) 
+    {        
+        emailext(
+            subject: "${stageName} Stage - ${status}",
+            body: "The ${stageName} stage has completed with status: ${status}. Please read the attached logs for more details.",
+            to: "${env.RECIPIENT_EMAIL}",
+            attachmentsPattern: "${env.WORKSPACE}/${env.LOG_FILE_PATH}",
+            attachLog: true
+        )
+    }
 
     stages {
         stage('Build') {
@@ -68,16 +78,5 @@ pipeline {
                 echo "Task: Deploy the application to the production environment by using SSH to deloy to AWS EC2 instance."
             }
         }
-    }
-    
-    def sendEmailNotification(stageName, status) 
-    {        
-        emailext(
-            subject: "${stageName} Stage - ${status}",
-            body: "The ${stageName} stage has completed with status: ${status}. Please read the attached logs for more details.",
-            to: "${env.RECIPIENT_EMAIL}",
-            attachmentsPattern: "${env.WORKSPACE}/${env.LOG_FILE_PATH}",
-            attachLog: true
-        )
     }
 }
