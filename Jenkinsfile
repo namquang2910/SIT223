@@ -5,12 +5,12 @@ pipeline {
         RECIPIENT_EMAIL = "namquang2017@gmail.com"
         LOG_FILE_PATH = "logs/build-log.txt"
     }
+
     stages {
         stage('Build') {
             steps {
                 echo "Build the code using 'CMake'"
                 //sh 'cmake --build'
-
             }
         }
 
@@ -19,7 +19,8 @@ pipeline {
                 echo "Run unit tests to ensure code functionality and integration tests to ensure components work together, then send the status to the email."
                 echo "Using Ctest from CMake"
                 //sh 'cd build && ctest --output-on-failure'
-                post    {
+            }
+            post {
                 always {
                     script {
                         emailext(
@@ -31,14 +32,13 @@ pipeline {
                         )
                     }
                 }
-                }
             }
         }
+
         stage('Code Analysis') {
             steps {
                 echo "Task: Perform code analysis to ensure code quality and adherence to industry standards using CppCheck."
                 //sh 'cppcheck --enable=all --inconclusive --xml --xml-version=2 . 2> cppcheck.xml'
-
             }
         }
 
@@ -47,7 +47,8 @@ pipeline {
                 echo "Perform a security scan to identify vulnerabilities in the c++ code and send the status of the scan to email."
                 echo "Using SonarQube for security scanning."
                 //sh 'sonar-scanner'
-                post {
+            }
+            post {
                 always {
                     emailext(
                         subject: "Security Scan Stage - ${currentBuild.currentResult}",
@@ -55,11 +56,10 @@ pipeline {
                         to: "${env.RECIPIENT_EMAIL}",
                         attachmentsPattern: "${env.WORKSPACE}/${env.LOG_FILE_PATH}",
                         attachLog: true
-                        )
-                        }
-                    }
+                    )
                 }
             }
+        }
 
         stage('Deploy to Staging') {
             steps {
@@ -75,7 +75,7 @@ pipeline {
 
         stage('Deploy to Production') {
             steps {
-                echo "Task: Deploy the application to the production environment by using SSH to deloy to AWS EC2 instance."
+                echo "Task: Deploy the application to the production environment by using SSH to deploy to AWS EC2 instance."
             }
         }
     }
