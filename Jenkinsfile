@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo "Build the code using 'CMake'."
+                echo "Build the code using 'CMake'"
                 //sh 'cmake --build
             }
         }
