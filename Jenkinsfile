@@ -23,7 +23,7 @@ pipeline {
                     script {
                         emailext(
                             subject: "Unit and Integration Tests Stage - ${currentBuild.currentResult}",
-                            body: "The ${Unit and Integration Tests} stage has completed with status: ${currentBuild.currentResult}. Please read the attached logs for more details.",
+                            body: "The Unit and Integration Tests stage has completed with status: ${currentBuild.currentResult}. Please read the attached logs for more details.",
                             to: "${env.RECIPIENT_EMAIL}",
                             attachmentsPattern: "${env.WORKSPACE}/${env.LOG_FILE_PATH}",
                             attachLog: true
@@ -51,7 +51,7 @@ pipeline {
                     script {
                             emailext(
                                 subject: "Security Scan Stage - ${currentBuild.currentResult}",
-                                body: "The ${Security Scan} stage has completed with status: ${currentBuild.currentResult}. Please read the attached logs for more details.",
+                                body: "The Security Scan stage has completed with status: ${currentBuild.currentResult}. Please read the attached logs for more details.",
                                 to: "${env.RECIPIENT_EMAIL}",
                                 attachmentsPattern: "${env.WORKSPACE}/${env.LOG_FILE_PATH}",
                                 attachLog: true
